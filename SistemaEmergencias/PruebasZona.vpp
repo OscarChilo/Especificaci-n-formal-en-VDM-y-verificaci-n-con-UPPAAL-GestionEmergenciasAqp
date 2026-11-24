@@ -1,0 +1,37 @@
+
+class PruebasZona
+
+operations
+
+  -- CP-08: Actualizar el nivel de alerta
+  public CP08 : () ==> ZonaAfectada`NivelAlerta
+
+  CP08() ==
+  (
+    dcl z : ZonaAfectada :=
+      new ZonaAfectada(
+        mk_token("ZONA_01"),
+        "Zona de Arequipa"
+      );
+
+    z.ActualizarAlerta(<ROJO>);
+
+    return z.VerAlerta()
+  );
+
+  -- Comprobar estado inicial
+  public VerificarEstadoInicial :
+    () ==> ZonaAfectada`NivelAlerta
+
+  VerificarEstadoInicial() ==
+  (
+    dcl z : ZonaAfectada :=
+      new ZonaAfectada(
+        mk_token("ZONA_01"),
+        "Zona de Arequipa"
+      );
+
+    return z.VerAlerta()
+  );
+
+end PruebasZona

@@ -1,0 +1,47 @@
+
+class ZonaAfectada
+
+types
+
+  public IdZona = token;
+
+  public NivelAlerta =
+      <VERDE> |
+      <AMARILLO> |
+      <NARANJA> |
+      <ROJO>;
+
+instance variables
+
+  private idZona : IdZona;
+  private nombre : seq1 of char;
+  private nivelAlerta : NivelAlerta := <VERDE>;
+
+operations
+
+  -- Constructor de la zona
+  public ZonaAfectada :
+    IdZona * seq1 of char ==> ZonaAfectada
+
+  ZonaAfectada(id, nom) ==
+  (
+    idZona := id;
+    nombre := nom;
+    nivelAlerta := <VERDE>
+  );
+
+  -- Actualizar nivel de alerta
+  public ActualizarAlerta : NivelAlerta ==> ()
+
+  ActualizarAlerta(nuevoNivel) ==
+    nivelAlerta := nuevoNivel
+  post
+    nivelAlerta = nuevoNivel;
+
+  -- Consultar nivel actual
+  public VerAlerta : () ==> NivelAlerta
+
+  VerAlerta() ==
+    return nivelAlerta;
+
+end ZonaAfectada

@@ -1,0 +1,143 @@
+
+class SistemaEmergencias
+
+instance variables
+
+  -- Zonas registradas
+  private zonas :
+    map ZonaAfectada`IdZona to ZonaAfectada := {|->};
+
+  -- Unidades de rescate registradas
+  private unidades :
+    map UnidadRescate`IdUnidad to UnidadRescate := {|->};
+
+  -- Estaciones de monitoreo
+  private estaciones :
+    map EstacionMonitoreo`IdEstacion to EstacionMonitoreo := {|->};
+
+  -- Albergues registrados
+  private albergues :
+    map AlbergueSeguro`IdAlbergue to AlbergueSeguro := {|->};
+
+  -- Relaciones entre unidades y zonas
+  private asignaciones :
+    map UnidadRescate`IdUnidad to ZonaAfectada`IdZona := {|->};
+
+  -- Zonas actualmente en emergencia
+  private zonasEnEmergencia :
+    set of ZonaAfectada`IdZona := {};
+
+  -- Invariantes globales
+  inv
+    dom asignaciones subset dom unidades
+    and
+    rng asignaciones subset dom zonas
+    and
+    zonasEnEmergencia subset dom zonas;
+
+operations
+
+  -- Registrar una zona
+  public RegistrarZona :
+    ZonaAfectada`IdZona * seq1 of char ==> ()
+
+  RegistrarZona(id, nombre) ==
+    zonas := zonas munion
+      {id |-> new ZonaAfectada(id, nombre)}
+  pre
+    id not in set dom zonas;
+
+
+  -- Registrar una unidad de rescate
+  public RegistrarUnidad :
+    UnidadRescate`IdUnidad ==> ()
+
+  RegistrarUnidad(id) ==
+    unidades := unidades munion
+      {id |-> new UnidadRescate(id)}
+  pre
+    id not in set dom unidades;
+
+
+  -- Registrar una estacion
+  public RegistrarEstacion :
+    EstacionMonitoreo`IdEstacion *
+    seq1 of char ==> ()
+
+  RegistrarEstacion(id, nombre) ==
+    estaciones := estaciones munion
+      {id |-> new EstacionMonitoreo(id, nombre)}
+  pre
+    id not in set dom estaciones;
+
+
+  -- Registrar un albergue
+  public RegistrarAlbergue :
+    AlbergueSeguro`IdAlbergue *
+    seq1 of char * nat1 ==> ()
+
+  RegistrarAlbergue(id, nombre, capacidad) ==
+    albergues := albergues munion
+      {id |-> new AlbergueSeguro(
+        id, nombre, capacidad)}
+  pre
+    id not in set dom albergues;
+
+
+  -- Asignar una unidad a una zona
+  public AsignarUnidad :
+    UnidadRescate`IdUnidad *
+    ZonaAfectada`IdZona ==> ()
+
+  AsignarUnidad(idUnidad, idZona) ==
+  (
+    unidades(idUnidad).Asignar(idZona);
+    asignaciones := asignaciones munion
+      {idUnidad |-> idZona}
+  )
+  pre
+    idUnidad in set dom unidades
+    and idZona in set dom zonas
+    and idUnidad not in set dom asignaciones;
+
+
+  -- Marcar una zona en emergencia
+  public DeclararEmergencia :
+    ZonaAfectada`IdZona ==> ()
+
+  DeclararEmergencia(idZona) ==
+    zonasEnEmergencia :=
+      zonasEnEmergencia union {idZona}
+  pre
+    idZona in set dom zonas;
+
+
+  -- Consultar asignaciones
+  public VerAsignaciones :
+    () ==> map UnidadRescate`IdUnidad
+             to ZonaAfectada`IdZona
+
+  VerAsignaciones() ==
+    return asignaciones;
+
+
+  -- Consultar zonas en emergencia
+  public VerZonasEmergencia :
+    () ==> set of ZonaAfectada`IdZona
+
+  VerZonasEmergencia() ==
+    return zonasEnEmergencia;
+
+
+  -- Consultar cantidades registradas
+  public VerResumen : () ==> seq of nat
+
+  VerResumen() ==
+    return [
+      card (dom zonas),
+      card (dom unidades),
+      card (dom estaciones),
+      card (dom albergues)
+    ];
+
+end SistemaEmergencias

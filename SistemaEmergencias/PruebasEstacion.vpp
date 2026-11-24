@@ -1,0 +1,69 @@
+
+class PruebasEstacion
+
+operations
+
+  -- PE-01: Estacion sin mediciones
+  public PE01 : () ==> nat
+
+  PE01() ==
+  (
+    dcl e : EstacionMonitoreo :=
+      new EstacionMonitoreo(
+        mk_token("EST_01"), "Estacion Norte"
+      );
+
+    return e.ContarMediciones()
+  );
+
+
+  -- PE-02: Registrar precipitaciones
+  public PE02 : () ==> seq of real
+
+  PE02() ==
+  (
+    dcl e : EstacionMonitoreo :=
+      new EstacionMonitoreo(
+        mk_token("EST_01"), "Estacion Norte"
+      );
+
+    e.RegistrarMedicion(12.5, 30.0);
+    e.RegistrarMedicion(18.0, 42.0);
+
+    return e.VerPrecipitacion()
+  );
+
+
+  -- PE-03: Consultar caudales
+  public PE03 : () ==> seq of real
+
+  PE03() ==
+  (
+    dcl e : EstacionMonitoreo :=
+      new EstacionMonitoreo(
+        mk_token("EST_01"), "Estacion Norte"
+      );
+
+    e.RegistrarMedicion(12.5, 30.0);
+    e.RegistrarMedicion(18.0, 42.0);
+
+    return e.VerCaudal()
+  );
+
+
+  -- PE-04: Rechazar una medicion negativa
+  public PE04 : () ==> nat
+
+  PE04() ==
+  (
+    dcl e : EstacionMonitoreo :=
+      new EstacionMonitoreo(
+        mk_token("EST_01"), "Estacion Norte"
+      );
+
+    e.RegistrarMedicion(-5.0, 30.0);
+
+    return e.ContarMediciones()
+  );
+
+end PruebasEstacion

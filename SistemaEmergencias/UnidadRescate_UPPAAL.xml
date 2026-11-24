@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Declaraciones globales
+// Sistema de Alerta y Gestion de Emergencias - UnidadRescate
+// Autores: Chilo, Suasaca, Huarca - UNSA</declaration>
+	<template>
+		<name x="5" y="5">UnidadRescate</name>
+		<declaration>// Variable que indica si la unidad tiene una zona asignada
+bool tieneZona = false;</declaration>
+		<location id="id0" x="-204" y="-102">
+			<name x="-255" y="-136">DISPONIBLE</name>
+		</location>
+		<location id="id1" x="102" y="-102">
+			<name x="85" y="-136">ASIGNADA</name>
+		</location>
+		<location id="id2" x="102" y="102">
+			<name x="119" y="93">OPERANDO</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="t0">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-102" y="-153">tieneZona == false</label>
+			<label kind="assignment" x="-102" y="-136">tieneZona = true</label>
+			<label kind="comments" x="-102" y="-170">Asignar</label>
+		</transition>
+		<transition id="t1">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="119" y="-34">tieneZona == true</label>
+			<label kind="comments" x="119" y="-51">IniciarOperacion</label>
+		</transition>
+		<transition id="t2">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-102" y="-76">tieneZona = false</label>
+			<label kind="comments" x="-102" y="-93">Liberar desde ASIGNADA</label>
+			<nail x="-51" y="-76"/>
+		</transition>
+		<transition id="t3">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-255" y="25">tieneZona = false</label>
+			<label kind="comments" x="-255" y="8">Liberar desde OPERANDO</label>
+			<nail x="-204" y="102"/>
+		</transition>
+	</template>
+	<system>// Instancia del sistema
+unidad = UnidadRescate();
+
+system unidad;</system>
+	<queries>
+		<query>
+			<formula>A[] (unidad.DISPONIBLE imply unidad.tieneZona == false)</formula>
+			<comment>P1: Disponibilidad sin asignacion - Una unidad en estado DISPONIBLE no debe mantener una zona asignada.</comment>
+		</query>
+		<query>
+			<formula>A[] (unidad.OPERANDO imply unidad.tieneZona == true)</formula>
+			<comment>P2: Operacion con asignacion - Una unidad en estado OPERANDO debe mantener una zona asignada.</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; unidad.ASIGNADA</formula>
+			<comment>P3: Alcanzabilidad - Es posible alcanzar el estado ASIGNADA.</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; unidad.OPERANDO</formula>
+			<comment>P4: Alcanzabilidad - Es posible alcanzar el estado OPERANDO.</comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>P5: Ausencia de deadlock - El sistema nunca se bloquea.</comment>
+		</query>
+	</queries>
+</nta>

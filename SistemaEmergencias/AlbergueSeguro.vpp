@@ -1,0 +1,57 @@
+
+class AlbergueSeguro
+
+types
+
+  public IdAlbergue = token;
+
+instance variables
+
+  private id : IdAlbergue;
+  private nombre : seq1 of char;
+  private capacidadMaxima : nat1 := 1;
+  private ocupacionActual : nat := 0;
+
+  inv ocupacionActual <= capacidadMaxima;
+
+operations
+
+  -- Constructor del albergue
+  public AlbergueSeguro :
+    IdAlbergue * seq1 of char * nat1 ==> AlbergueSeguro
+
+  AlbergueSeguro(i, n, capacidad) ==
+  (
+    id := i;
+    nombre := n;
+    capacidadMaxima := capacidad;
+    ocupacionActual := 0
+  );
+
+  -- Registrar ingreso de personas
+  public RegistrarIngreso : nat1 ==> ()
+
+  RegistrarIngreso(cantidad) ==
+    ocupacionActual := ocupacionActual + cantidad
+  pre
+    ocupacionActual + cantidad <= capacidadMaxima
+  post
+    ocupacionActual = ocupacionActual~ + cantidad;
+
+  -- Registrar salida de personas
+  public RegistrarSalida : nat1 ==> ()
+
+  RegistrarSalida(cantidad) ==
+    ocupacionActual := ocupacionActual - cantidad
+  pre
+    cantidad <= ocupacionActual
+  post
+    ocupacionActual = ocupacionActual~ - cantidad;
+
+  -- Consultar ocupacion actual
+  public VerOcupacion : () ==> nat
+
+  VerOcupacion() ==
+    return ocupacionActual;
+
+end AlbergueSeguro

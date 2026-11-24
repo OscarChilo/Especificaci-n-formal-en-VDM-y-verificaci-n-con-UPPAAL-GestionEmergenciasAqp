@@ -1,0 +1,61 @@
+
+class PruebasUnidad
+
+operations
+
+  -- CP-04: Asignar una unidad disponible
+  public CP04 : () ==> UnidadRescate`EstadoUnidad
+  CP04() ==
+  (
+    dcl u : UnidadRescate :=
+      new UnidadRescate(mk_token("BRIGADA_01"));
+
+    u.Asignar(mk_token("ZONA_01"));
+
+    return u.VerEstado()
+  );
+
+
+  -- CP-05: Intentar una segunda asignacion
+  public CP05 : () ==> UnidadRescate`EstadoUnidad
+  CP05() ==
+  (
+    dcl u : UnidadRescate :=
+      new UnidadRescate(mk_token("BRIGADA_01"));
+
+    u.Asignar(mk_token("ZONA_01"));
+    u.Asignar(mk_token("ZONA_02"));
+
+    return u.VerEstado()
+  );
+
+
+  -- CP-06: Pasar de ASIGNADA a OPERANDO
+  public CP06 : () ==> UnidadRescate`EstadoUnidad
+  CP06() ==
+  (
+    dcl u : UnidadRescate :=
+      new UnidadRescate(mk_token("BRIGADA_01"));
+
+    u.Asignar(mk_token("ZONA_01"));
+    u.IniciarOperacion();
+
+    return u.VerEstado()
+  );
+
+
+  -- CP-07: Liberar una unidad
+  public CP07 : () ==> UnidadRescate`EstadoUnidad
+  CP07() ==
+  (
+    dcl u : UnidadRescate :=
+      new UnidadRescate(mk_token("BRIGADA_01"));
+
+    u.Asignar(mk_token("ZONA_01"));
+    u.IniciarOperacion();
+    u.Liberar();
+
+    return u.VerEstado()
+  );
+
+end PruebasUnidad

@@ -1,0 +1,23 @@
+# Archivos pesados / instaladores
+*.msi
+*.exe
+*.zip
+uppaal-5.0.0-signed.exe
+OpenJDK25U-jdk_x64_windows_hotspot_*.msi
+
+# PDFs de referencia (no son del proyecto)
+ArticuloLACCEI2017_VerificacionUPPAL_Control Semaforos.pdf
+ArtículoUPPAAL_2.pdf
+
+# Archivo bat local
+IniciarUPPAAL.bat
+
+# Archivos temporales de VDM++ Toolbox
+*.wgm
+
+# Archivos temporales de Word
+~$*.docx
+~$*.pptx
+
+# Versiones temporales
+*_v2.docx

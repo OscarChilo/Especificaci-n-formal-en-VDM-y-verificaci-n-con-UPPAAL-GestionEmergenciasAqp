@@ -1,0 +1,42 @@
+
+class PruebasAlbergue
+
+operations
+
+  -- CP-01: Crear un albergue de capacidad 100
+  public CP01 : () ==> nat
+  CP01() ==
+  (
+    dcl a : AlbergueSeguro :=
+      new AlbergueSeguro(
+        mk_token("ALB_01"), "Albergue Central", 100
+      );
+    return a.VerOcupacion()
+  );
+
+  -- CP-02: Registrar 100 personas
+  public CP02 : () ==> nat
+  CP02() ==
+  (
+    dcl a : AlbergueSeguro :=
+      new AlbergueSeguro(
+        mk_token("ALB_01"), "Albergue Central", 100
+      );
+    a.RegistrarIngreso(100);
+    return a.VerOcupacion()
+  );
+
+  -- CP-03: Intentar superar la capacidad maxima
+  public CP03 : () ==> nat
+  CP03() ==
+  (
+    dcl a : AlbergueSeguro :=
+      new AlbergueSeguro(
+        mk_token("ALB_01"), "Albergue Central", 100
+      );
+    a.RegistrarIngreso(100);
+    a.RegistrarIngreso(1);
+    return a.VerOcupacion()
+  );
+
+end PruebasAlbergue

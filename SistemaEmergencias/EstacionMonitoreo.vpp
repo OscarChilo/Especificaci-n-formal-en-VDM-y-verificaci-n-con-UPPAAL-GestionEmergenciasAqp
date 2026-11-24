@@ -1,0 +1,66 @@
+
+class EstacionMonitoreo
+
+types
+
+  public IdEstacion = token;
+
+instance variables
+
+  private idEstacion : IdEstacion;
+  private nombre : seq1 of char;
+
+  private historialPrecipitacion : seq of real := [];
+  private historialCaudal : seq of real := [];
+
+  -- Ambas secuencias deben tener igual cantidad
+  inv
+    len historialPrecipitacion = len historialCaudal;
+
+operations
+
+  -- Constructor de la estacion
+  public EstacionMonitoreo :
+    IdEstacion * seq1 of char ==> EstacionMonitoreo
+
+  EstacionMonitoreo(id, nom) ==
+  (
+    idEstacion := id;
+    nombre := nom;
+    historialPrecipitacion := [];
+    historialCaudal := []
+  );
+
+  -- Registrar medicion de lluvia y caudal
+  public RegistrarMedicion : real * real ==> ()
+
+  RegistrarMedicion(lluvia, caudal) ==
+    atomic
+    (
+      historialPrecipitacion :=
+        historialPrecipitacion ^ [lluvia];
+      historialCaudal :=
+        historialCaudal ^ [caudal]
+    )
+  pre
+    lluvia >= 0 and caudal >= 0;
+
+  -- Consultar precipitaciones
+  public VerPrecipitacion : () ==> seq of real
+
+  VerPrecipitacion() ==
+    return historialPrecipitacion;
+
+  -- Consultar caudales
+  public VerCaudal : () ==> seq of real
+
+  VerCaudal() ==
+    return historialCaudal;
+
+  -- Consultar cantidad de mediciones
+  public ContarMediciones : () ==> nat
+
+  ContarMediciones() ==
+    return len historialPrecipitacion;
+
+end EstacionMonitoreo

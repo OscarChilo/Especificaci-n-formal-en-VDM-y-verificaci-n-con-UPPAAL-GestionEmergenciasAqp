@@ -1,0 +1,77 @@
+
+class UnidadRescate
+
+types
+
+  public IdUnidad = token;
+  public IdZona = token;
+
+  public EstadoUnidad =
+      <DISPONIBLE> |
+      <ASIGNADA> |
+      <OPERANDO>;
+
+instance variables
+
+  private idUnidad : IdUnidad;
+  private estado : EstadoUnidad := <DISPONIBLE>;
+  private zonaAsignada : [IdZona] := nil;
+
+  inv
+    (estado = <DISPONIBLE>) <=>
+    (zonaAsignada = nil);
+
+operations
+
+  -- Constructor
+  public UnidadRescate : IdUnidad ==> UnidadRescate
+  UnidadRescate(id) ==
+  (
+    idUnidad := id;
+    estado := <DISPONIBLE>;
+    zonaAsignada := nil
+  );
+
+  -- Asignar unidad a una zona
+  public Asignar : IdZona ==> ()
+  Asignar(zona) ==
+    atomic
+    (
+      zonaAsignada := zona;
+      estado := <ASIGNADA>
+    )
+  pre
+    estado = <DISPONIBLE> and
+    zonaAsignada = nil;
+
+  -- Iniciar operaciones de rescate
+  public IniciarOperacion : () ==> ()
+  IniciarOperacion() ==
+    estado := <OPERANDO>
+  pre
+    estado = <ASIGNADA>;
+
+  -- Liberar unidad
+  public Liberar : () ==> ()
+  Liberar() ==
+    atomic
+    (
+      zonaAsignada := nil;
+      estado := <DISPONIBLE>
+    )
+  pre
+    estado = <ASIGNADA> or
+    estado = <OPERANDO>;
+
+  -- Consultar estado actual
+  public VerEstado : () ==> EstadoUnidad
+  VerEstado() ==
+    return estado;
+
+  -- Consultar zona asignada
+  public VerZonaAsignada : () ==> [IdZona]
+  VerZonaAsignada() ==
+    return zonaAsignada;
+
+end UnidadRescate
+

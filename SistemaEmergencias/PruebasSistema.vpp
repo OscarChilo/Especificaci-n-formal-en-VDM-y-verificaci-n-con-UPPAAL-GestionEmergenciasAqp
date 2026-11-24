@@ -1,0 +1,83 @@
+class PruebasSistema
+
+operations
+
+  -- PS-01: Registrar cuatro entidades
+  public PS01 : () ==> seq of nat
+  PS01() ==
+  (
+    dcl s : SistemaEmergencias :=
+      new SistemaEmergencias();
+
+    s.RegistrarZona(
+      mk_token("ZONA_01"), "Zona Norte");
+
+    s.RegistrarUnidad(
+      mk_token("BRIGADA_01"));
+
+    s.RegistrarEstacion(
+      mk_token("EST_01"), "Estacion Norte");
+
+    s.RegistrarAlbergue(
+      mk_token("ALB_01"), "Albergue Central", 100);
+
+    return s.VerResumen()
+  );
+
+
+  -- PS-02: Asignar una unidad
+  public PS02 : () ==> map token to token
+  PS02() ==
+  (
+    dcl s : SistemaEmergencias :=
+      new SistemaEmergencias();
+
+    s.RegistrarZona(
+      mk_token("ZONA_01"), "Zona Norte");
+
+    s.RegistrarUnidad(
+      mk_token("BRIGADA_01"));
+
+    s.AsignarUnidad(
+      mk_token("BRIGADA_01"),
+      mk_token("ZONA_01"));
+
+    return s.VerAsignaciones()
+  );
+
+
+  -- PS-03: Declarar emergencia
+  public PS03 : () ==> set of token
+  PS03() ==
+  (
+    dcl s : SistemaEmergencias :=
+      new SistemaEmergencias();
+
+    s.RegistrarZona(
+      mk_token("ZONA_01"), "Zona Norte");
+
+    s.DeclararEmergencia(
+      mk_token("ZONA_01"));
+
+    return s.VerZonasEmergencia()
+  );
+
+
+  -- PS-04: Zona inexistente
+  public PS04 : () ==> nat
+  PS04() ==
+  (
+    dcl s : SistemaEmergencias :=
+      new SistemaEmergencias();
+
+    s.RegistrarUnidad(
+      mk_token("BRIGADA_01"));
+
+    s.AsignarUnidad(
+      mk_token("BRIGADA_01"),
+      mk_token("ZONA_99"));
+
+    return 1
+  );
+
+end PruebasSistema
